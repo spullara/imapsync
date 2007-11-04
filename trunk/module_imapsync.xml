@@ -62,10 +62,17 @@
     <target name="clean.module.imapsync" description="cleanup module">
         <delete dir="${imapsync.output.dir}"/>
         <delete dir="${imapsync.testoutput.dir}"/>
+        <delete dir="." includes="*.jar"/>
     </target>
 
-    <target name="jar">
-        <jar basedir="${imapsync.output.dir}" destfile="imapsync.jar">
+    <target name="jar" depends="compile.module.imapsync">
+        <exec executable="svn" output="svninfo">
+            <arg value="info"/>
+            <arg value="--xml"/>
+        </exec>
+        <xmlproperty file="svninfo"/>
+        <delete file="svninfo"/>
+        <jar basedir="${imapsync.output.dir}" destfile="imapsync-r${info.entry.commit(revision)}.jar">
             <manifest>
                 <attribute name="Main-Class" value="com.sampullara.imapsync.IMAPSync"/>
             </manifest>
