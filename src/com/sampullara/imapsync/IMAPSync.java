@@ -4,13 +4,13 @@ import com.sampullara.cli.Args;
 import com.sampullara.cli.Argument;
 
 import javax.mail.*;
-import javax.mail.search.ReceivedDateTerm;
-import javax.mail.search.SearchTerm;
-import javax.mail.search.ComparisonTerm;
 import javax.mail.event.MessageCountAdapter;
 import javax.mail.event.MessageCountEvent;
-import java.util.List;
+import javax.mail.search.ComparisonTerm;
+import javax.mail.search.ReceivedDateTerm;
+import java.security.Security;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -36,6 +36,9 @@ public class IMAPSync {
     @Argument(alias = "df", description = "Destination folder")
     private String destFolder;
 
+    @Argument(description = "Disable SSL certificate checking")
+    private Boolean ignorecert = false;
+
     private List<String> folders;
 
     public static void main(String[] args) throws MessagingException {
@@ -49,6 +52,11 @@ public class IMAPSync {
     }
 
     private void run() throws MessagingException {
+
+        if (ignorecert) {
+            Security.setProperty("ssl.SocketFactory.provider", "com.sampullara.imapsync.ssl.DummySSLSocketFactory");
+        }
+
         Session sourceSession = Session.getDefaultInstance(System.getProperties());
         URLName sourceURLName = new URLName(sourceURL);
         Store sourceStore = sourceSession.getStore(sourceURLName);
@@ -110,6 +118,7 @@ public class IMAPSync {
         }
         df.addMessageCountListener(new MessageCountAdapter() {
             private int i = 0;
+
             public void messagesAdded(MessageCountEvent messageCountEvent) {
                 l.info("Message added: " + ++i);
             }
@@ -130,7 +139,7 @@ public class IMAPSync {
                     continue;
                 }
             }
-            df.appendMessages(new Message[] { message } );
+            df.appendMessages(new Message[] { message });
         }
     }
 
