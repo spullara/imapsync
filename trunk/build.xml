@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="imapsync" default="all">
+
+
+    <property file="imapsync.properties"/>
+    <!-- Uncomment the following property if no tests compilation is needed -->
+    <!--
+   <property name="skip.tests" value="true"/>
+    -->
+
+    <!-- Compiler options -->
+
+    <property name="compiler.debug" value="on"/>
+    <property name="compiler.generate.no.warnings" value="off"/>
+    <property name="compiler.args" value=""/>
+    <property name="compiler.max.memory" value="128m"/>
+    <patternset id="ignored.files">
+        <exclude name="**/CVS/**"/>
+        <exclude name="**/SCCS/**"/>
+        <exclude name="**/RCS/**"/>
+        <exclude name="**/rcs/**"/>
+        <exclude name="**/.DS_Store/**"/>
+        <exclude name="**/.svn/**"/>
+    </patternset>
+    <patternset id="compiler.resources">
+        <include name="**/?*.properties"/>
+        <include name="**/?*.xml"/>
+        <include name="**/?*.gif"/>
+        <include name="**/?*.png"/>
+        <include name="**/?*.jpeg"/>
+        <include name="**/?*.jpg"/>
+        <include name="**/?*.html"/>
+        <include name="**/?*.dtd"/>
+        <include name="**/?*.tld"/>
+    </patternset>
+
+
+    <!-- Project Libraries -->
+
+    <path id="library.mail-1.4.classpath">
+        <pathelement location="${basedir}/lib/mail-1.4.jar"/>
+    </path>
+
+    <path id="library.activation-1.1.classpath">
+        <pathelement location="${basedir}/lib/activation-1.1.jar"/>
+    </path>
+
+    <path id="library.cli.classpath">
+        <pathelement location="${basedir}/lib/cli-969.jar"/>
+    </path>
+
+
+    <!-- Global Libraries -->
+
+
+    <!-- Application Server Libraries -->
+
+    <!-- Modules -->
+
+    <import file="${basedir}/module_imapsync.xml"/>
+
+    <target name="init" description="Build initialization">
+        <!-- Perform any build initialization in this target -->
+    </target>
+
+    <target name="clean" depends="clean.module.imapsync" description="cleanup all"/>
+
+    <target name="all" depends="init, clean, compile.module.imapsync, jar" description="build all"/>
+
+</project>
