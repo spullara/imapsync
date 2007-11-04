@@ -1,0 +1,38 @@
+/*
+ * Copyright (c) 2005, Sam Pullara (sam@sampullara.com). All Rights Reserved.
+ * You may modify and redistribute as long as this attribution remains.
+ */
+
+Build:
+
+ant
+
+Execute:
+
+java -jar imapsync.jar [options]
+
+ Usage: com.sampullara.imapsync.IMAPSync [options] [folders...]
+   -source (-s) [String] This is the source mail url
+   -dest (-d) [String] This is the destination mail url
+   -sourceFolder (-sf) [String] Source folder
+   -destFolder (-df) [String] Destination folder
+
+IMAP:
+imap://user:password@server
+
+POP3:
+pop3://user:password@server
+
+MBOX:
+mstor:[path]
+
+Currently it will not check for duplicates or anything like that so just copy once. It will create
+destination folders for you.
+
+Examples:
+
+java -jar imapsync.jar -s imap://sam:password@sampullara.com \
+    -d imap://sam:password@zimbra.buildandtest.com -sf INBOX -df INBOX
+java -jar imapsync.jar -s imap://sam:password@sampullara.com \
+    -d imap://sam:password@zimbra.buildandtest.com -sf INBOX/ -df INBOX Apple Groovy Xen
+

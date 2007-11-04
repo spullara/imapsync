@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="module_imapsync" default="compile.module.imapsync">
+    <dirname property="module.imapsync.basedir" file="${ant.file.module_imapsync}"/>
+
+
+    <property name="compiler.args.imapsync" value="${compiler.args}"/>
+
+    <property name="imapsync.output.dir" value="${module.imapsync.basedir}/classes/production/IMAPSync"/>
+    <property name="imapsync.testoutput.dir" value="${module.imapsync.basedir}/classes/test/IMAPSync"/>
+
+    <path id="imapsync.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="imapsync.module.classpath">
+        <path refid="library.activation-1.1.classpath"/>
+        <path refid="library.mail-1.4.classpath"/>
+        <path refid="library.cli.classpath"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.imapsync">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.imapsync">
+        <patternset refid="excluded.from.module.imapsync"/>
+    </patternset>
+
+    <path id="imapsync.module.sourcepath">
+        <dirset dir="${module.imapsync.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.imapsync" depends="compile.module.imapsync.production,compile.module.imapsync.tests"
+            description="Compile module IMAPSync"/>
+
+    <target name="compile.module.imapsync.production" description="Compile module IMAPSync; production classes">
+        <mkdir dir="${imapsync.output.dir}"/>
+        <javac destdir="${imapsync.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}"
+               memorymaximumsize="${compiler.max.memory}" fork="true">
+            <compilerarg line="${compiler.args.imapsync}"/>
+            <bootclasspath refid="imapsync.module.bootclasspath"/>
+            <classpath refid="imapsync.module.classpath"/>
+            <src refid="imapsync.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.imapsync"/>
+        </javac>
+
+        <copy todir="${imapsync.output.dir}">
+            <fileset dir="${module.imapsync.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.imapsync.tests" depends="compile.module.imapsync.production"
+            description="compile module IMAPSync; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.imapsync" description="cleanup module">
+        <delete dir="${imapsync.output.dir}"/>
+        <delete dir="${imapsync.testoutput.dir}"/>
+    </target>
+
+    <target name="jar">
+        <jar basedir="${imapsync.output.dir}" destfile="imapsync.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.sampullara.imapsync.IMAPSync"/>
+            </manifest>
+            <zipgroupfileset dir="lib" includes="**/*.jar"/>
+        </jar>
+    </target>
+
+
+</project>
