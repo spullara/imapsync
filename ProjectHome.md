@@ -1,0 +1,1 @@
+Simple JavaMail bridge that you can run to continuously copy one mail box to another mailbox.  Works with lots of available JavaMail implementations. Mostly tested with IMAP.
